@@ -1,0 +1,50 @@
+class Solution {
+    public void solveSudoku(char[][] board) {
+        solve(board);
+    }
+
+    public boolean solve(char[][] board) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+
+                if (board[i][j] == '.') {
+
+                    for (char c = '1'; c <= '9'; c++) {
+
+                        if (isValid(board, i, j, c)) {
+
+                            board[i][j] = c;  // ✅ place
+
+                            if (solve(board)) return true; // ✅ stop if solved
+
+                            board[i][j] = '.'; // ✅ backtrack
+                        }
+                    }
+
+                    return false; // ❗ no valid number found
+                }
+            }
+        }
+
+        return true; // ✅ solved
+    }
+
+    public boolean isValid(char[][] board, int row, int col, char c) {
+
+        for (int i = 0; i < 9; i++) {
+            if (board[i][col] == c) return false;
+            if (board[row][i] == c) return false;
+        }
+
+        int boxRow = 3 * (row / 3);
+        int boxCol = 3 * (col / 3);
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[boxRow + i][boxCol + j] == c) return false;
+            }
+        }
+
+        return true;
+    }
+}
